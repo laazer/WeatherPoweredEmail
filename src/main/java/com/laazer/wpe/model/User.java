@@ -1,5 +1,7 @@
 package com.laazer.wpe.model;
 
+import org.springframework.data.annotation.Id;
+
 import lombok.Data;
 
 /**
@@ -10,6 +12,7 @@ import lombok.Data;
 @Data
 public class User {
 
+    @Id
     private String email;
     private String location;
     private String zipCode;

@@ -6,7 +6,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +42,6 @@ public class ZipCodeAccessor implements IZipCodeAccessor {
         final String city = parts[0];
         final String state = parts[1];
         final String path = MessageFormat.format(PATH_FORMAT, this.apiKey, city, state);
-        log.info(path);
         return path;
     }
 
