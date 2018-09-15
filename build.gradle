@@ -1,0 +1,75 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
+    }
+}
+
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'org.springframework.boot' version '2.0.4.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+bootJar {
+    baseName = 'weather-powered-email'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+lombok {
+    version = '1.18.2'
+    sha256 = ""
+}
+
+/**
+javadoc {
+    dependsOn delombok
+    source = delombok.outputDir
+    failOnError = false
+}
+**/
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile 'com.google.maps:google-maps-services:0.2.11'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+/*
+ *Delombok
+
+import io.franzbecker.gradle.lombok.task.DelombokTask
+
+task delombok(type: DelombokTask, dependsOn: compileJava) {
+    ext.outputDir = file("$buildDir/delombok")
+    outputs.dir(outputDir)
+    sourceSets.main.java.srcDirs.each {
+        inputs.dir(it)
+        args(it, "-d", outputDir)
+    }
+    doFirst {
+        outputDir.deleteDir()
+    }
+}
+
+task delombokHelp(type: DelombokTask) {
+    args "--help"
+}
+*/

@@ -1,0 +1,8 @@
+.gradle/*
+.idea/*
+build/*
+gradle/*
+out/*
+
+# don't give out these keys
+src/main/resources/configuration/WeatherPoweredEmail.cfg

@@ -1,0 +1,16 @@
+body {
+
+}
+
+#app {
+  width: 50%;
+  height: 50%;
+  margin: 0 auto;
+  margin-top: 10%;
+  padding: 3%;
+  background: #8bdfc4;
+  border: 2px solid #eee;
+  border-radius: 3px;
+}
+
+.pac-container { z-index: 1051 !important; }
