@@ -5,9 +5,13 @@ package com.laazer.wpe.internal.exception;
  *
  * Created by Laazer
  */
-public class BeanInitException extends Exception {
+public class BeanInitException extends AbstractFormatException {
 
-    public BeanInitException(final String message, final Throwable e) {
-        super(message, e);
+    public BeanInitException(String message, String... args) {
+        super(message, args);
+    }
+
+    public BeanInitException(Throwable e, String message, String... args) {
+        super(e, message, args);
     }
 }

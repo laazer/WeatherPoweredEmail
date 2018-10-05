@@ -1,7 +1,6 @@
 package com.laazer.wpe.dao;
 
 import com.laazer.wpe.internal.exception.BeanInitException;
-import com.laazer.wpe.util.ExceptionUtil;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -23,7 +22,7 @@ public class LocalConfigAccessor {
             configFile.load(this.getClass().getClassLoader().
                     getResourceAsStream(configPath));
         } catch(final IOException eta){
-            ExceptionUtil.beanInitException(log, eta, "Failed to init {0}",
+            throw new BeanInitException(eta, "Failed to init {0}",
                     LocalConfigAccessor.class.getName());
 
         }
