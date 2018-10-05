@@ -44,7 +44,7 @@ public class EmailTask {
     }
 
     private Email makeEmailForUser(final User user) {
-        final String weather = weatherAccessor.getWeather(user.getLocation());
+        final String weather = weatherAccessor.getWeather(user.getZipCode());
         return Email.builder()
                 .recipients(Collections.singletonList(user.getEmail()))
                 .sender(this.senderId)

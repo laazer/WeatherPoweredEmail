@@ -53,6 +53,8 @@ dependencies {
     // google maps
     compile 'com.google.maps:google-maps-services:0.2.11'
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    // email
+    compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.0'
 }
 
 /*

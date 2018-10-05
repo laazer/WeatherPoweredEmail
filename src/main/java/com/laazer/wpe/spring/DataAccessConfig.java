@@ -5,6 +5,7 @@ import com.google.maps.GeoApiContext;
 import com.laazer.wpe.dao.IZipCodeAccessor;
 import com.laazer.wpe.dao.LocalConfigAccessor;
 import com.laazer.wpe.dao.GoogleMapsAccessor;
+import com.laazer.wpe.dao.WeatherAccessor;
 import com.laazer.wpe.dao.ZipCodeAccessor;
 import com.laazer.wpe.internal.exception.BeanInitException;
 
@@ -41,6 +42,12 @@ public class DataAccessConfig {
     public ZipCodeAccessor aZipCodeAccessor() throws BeanInitException {
         return new ZipCodeAccessor(appConfig.localConfigAccessor()
                 .getProperty(LocalConfigAccessor.Config.ZIP_CODE_API_KEY));
+    }
+
+    @Bean
+    public WeatherAccessor aWeatherAccessor() throws BeanInitException {
+        return new WeatherAccessor(appConfig.localConfigAccessor()
+                .getProperty(LocalConfigAccessor.Config.WEATHER_API_KEY));
     }
 
     @Bean
