@@ -46,8 +46,6 @@ public class EmailTask {
             final List<User> users = this.userRepository.findUserByTimeZone(tz);
             users.forEach(user -> this.emailAccessor.sendEmail(this.makeEmailForUser(user)));
         });
-        final User user = this.userRepository.findById("brandt.j125@gmail.com").get();
-        this.emailAccessor.sendEmail(this.makeEmailForUser(user));
     }
 
     private Email makeEmailForUser(final User user) {
