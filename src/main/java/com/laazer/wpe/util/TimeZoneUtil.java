@@ -8,10 +8,12 @@ import java.util.function.Function;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by Laazer
  */
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TimeZoneUtil {
 
@@ -32,8 +34,9 @@ public final class TimeZoneUtil {
                                                        final Function<Integer, Integer> rounder) {
         final int hour = offsetHour * 60 * 60 * 1000;
         final int minute = offsetMin * 60 * 1000;
-        final int offset = hour + minute;
+        final int offset = rounder.apply(hour + minute);
         final List<String> tzs = Arrays.asList(TimeZone.getAvailableIDs(offset));
+        log.info("Found {} for utc offset {} min", tzs,  offset);
         return tzs;
     }
 

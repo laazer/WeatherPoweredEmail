@@ -2,11 +2,12 @@ package com.laazer.wpe.spring;
 
 import com.google.maps.GeoApiContext;
 
+import com.laazer.wpe.dao.GoogleMapsAccessor;
 import com.laazer.wpe.dao.IZipCodeAccessor;
 import com.laazer.wpe.dao.LocalConfigAccessor;
-import com.laazer.wpe.dao.GoogleMapsAccessor;
 import com.laazer.wpe.dao.WeatherAccessor;
 import com.laazer.wpe.dao.ZipCodeAccessor;
+import com.laazer.wpe.db.UserRepository;
 import com.laazer.wpe.internal.exception.BeanInitException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class DataAccessConfig {
 
     @Autowired
     private AppConfig appConfig;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Bean
     public GeoApiContext geoApiContext() throws BeanInitException {
@@ -55,5 +59,8 @@ public class DataAccessConfig {
         return aZipCodeAccessor();
     }
 
+    public UserRepository getUserRepository() {
+        return this.userRepository;
+    }
 
 }

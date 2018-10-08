@@ -55,6 +55,7 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     // email
     compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.0'
+    compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.0'
 }
 
 /*

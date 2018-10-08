@@ -14,7 +14,7 @@ import javax.mail.internet.MimeMessage;
 /**
  * Created by Laazer
  */
-public class EmailAccessor {
+public class  EmailAccessor {
 
     private static final String EMAIL_HOST = "localhost";
 

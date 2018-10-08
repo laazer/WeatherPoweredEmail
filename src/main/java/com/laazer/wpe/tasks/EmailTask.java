@@ -10,9 +10,12 @@ import com.laazer.wpe.util.TimeZoneUtil;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Created by Laazer
  */
+@Slf4j
 public class EmailTask {
 
     private static final int DEFAULT_SEND_HOUR = 6;
@@ -37,6 +40,7 @@ public class EmailTask {
                 .getMinUntilUtc(DEFAULT_SEND_HOUR, DEFAULT_SEND_MIN);
         final List<String> activeTzs = TimeZoneUtil.getTimeForCurrentOffsetRound15(0,
                 minUntilSendTime);
+        log.info("Starting Email task for: {}", activeTzs);
         activeTzs.forEach(tz -> {
             final List<User> users = this.userRepository.findUserByTimeZone(tz);
             users.forEach(user -> this.emailAccessor.sendEmail(this.makeEmailForUser(user)));
@@ -44,7 +48,7 @@ public class EmailTask {
     }
 
     private Email makeEmailForUser(final User user) {
-        final String weather = weatherAccessor.getWeather(user.getZipCode());
+        final String weather = weatherAccessor.getWeather(user.getZipCode()).getWeatherSummary();
         return Email.builder()
                 .recipients(Collections.singletonList(user.getEmail()))
                 .sender(this.senderId)

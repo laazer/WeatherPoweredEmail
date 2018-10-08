@@ -9,11 +9,11 @@ public abstract class AbstractFormatException extends Exception {
     public AbstractFormatException(final Throwable e,
                                    final String message,
                                    final String... args) {
-        super(new MessageFormat(message).format(args), e);
+        super(MessageFormat.format(message, args), e);
     }
 
     public AbstractFormatException(final String message,
                                    final String... args) {
-        super(new MessageFormat(message).format(args));
+        super(MessageFormat.format(message, args));
     }
 }

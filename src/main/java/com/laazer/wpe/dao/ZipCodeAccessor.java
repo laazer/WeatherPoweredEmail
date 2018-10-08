@@ -33,8 +33,10 @@ public class ZipCodeAccessor implements IZipCodeAccessor {
         final RestTemplate restTemplate = new RestTemplate();
         final ZipCodesWrapper wrapper = restTemplate.getForObject(this.getPath(cityState),
                 ZipCodesWrapper.class);
-        return wrapper.zip_codes != null && wrapper.zip_codes.length != 0 ? wrapper.zip_codes[0]
-                : null;
+        return wrapper != null
+                && wrapper.zip_codes != null
+                && wrapper.zip_codes.length != 0
+                ? wrapper.zip_codes[0] : null;
     }
 
     private String getPath(final String cityState) {

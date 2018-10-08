@@ -16,7 +16,7 @@ public class ScheduledTasks {
     private EmailTask emailTask;
 
     //@Scheduled(fixedRate = TaskConfig.EMAIL_TASK_RATE_MS)
-    @Scheduled(cron = TaskConfig.EMAIL_TASK_RATE_CRON)
+    @Scheduled(cron = TaskConfig.TEST_CRON)
     public void runEmailTask() {
         this.emailTask.run();
     }
