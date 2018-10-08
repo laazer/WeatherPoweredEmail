@@ -25,6 +25,6 @@ public class MultiDayWeatherForecast {
 
     public String getWeatherSummary() {
         //TODO
-        return null;
+        return this.toString();
     }
 }

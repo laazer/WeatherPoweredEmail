@@ -37,6 +37,8 @@ public class LocalConfigAccessor {
         GEO_API_KEY("geoApiKey"),
         ZIP_CODE_API_KEY("zipCodeApiKey"),
         WEATHER_API_KEY("weatherApiKey"),
+        EMAIL_SMTP_SERVER("emailHost"),
+        EMAIL_HOST_PORT("emailPort"),
         EMAIL_UNAME("emailUname"),
         EMAIL_PWD("emailPassword");
 

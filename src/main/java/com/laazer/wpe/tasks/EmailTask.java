@@ -4,6 +4,7 @@ import com.laazer.wpe.dao.EmailAccessor;
 import com.laazer.wpe.dao.WeatherAccessor;
 import com.laazer.wpe.db.UserRepository;
 import com.laazer.wpe.model.Email;
+import com.laazer.wpe.model.MultiDayWeatherForecast;
 import com.laazer.wpe.model.User;
 import com.laazer.wpe.util.TimeZoneUtil;
 
@@ -45,14 +46,17 @@ public class EmailTask {
             final List<User> users = this.userRepository.findUserByTimeZone(tz);
             users.forEach(user -> this.emailAccessor.sendEmail(this.makeEmailForUser(user)));
         });
+        final User user = this.userRepository.findById("brandt.j125@gmail.com").get();
+        this.emailAccessor.sendEmail(this.makeEmailForUser(user));
     }
 
     private Email makeEmailForUser(final User user) {
-        final String weather = weatherAccessor.getWeather(user.getZipCode()).getWeatherSummary();
+        final MultiDayWeatherForecast weather = weatherAccessor.getWeather(user.getZipCode());
         return Email.builder()
                 .recipients(Collections.singletonList(user.getEmail()))
                 .sender(this.senderId)
-                .text(weather)
+                .body(weather.getWeatherSummary())
+                .subject(weather.getForecast().size() + " Day Forecast")
                 .build();
     }
 }
