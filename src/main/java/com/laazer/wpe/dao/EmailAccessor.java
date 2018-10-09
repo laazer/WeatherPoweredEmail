@@ -1,7 +1,14 @@
 package com.laazer.wpe.dao;
 
 import com.laazer.wpe.model.Email;
+import com.laazer.wpe.model.MultiDayWeatherForecast;
+import com.laazer.wpe.model.User;
 
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -12,13 +19,19 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Created by Laazer
  */
+@Slf4j
 public class EmailAccessor {
 
     private static final String EMAIL_HOST = "127.0.0.1";
+    private static final String WPE_SENDER = "no-reply.weather_powered_email@laazer.com";
+    private static final String WPE_SUBJECT = " Day Forecast";
 
+    private SpringTemplateEngine templateEngine;
     private final Session session;
 
     public EmailAccessor() {
@@ -29,7 +42,8 @@ public class EmailAccessor {
     }
 
     public EmailAccessor(final String host, final String port,
-                         final String uname, final String password) {
+                         final String uname, final String password,
+                         final SpringTemplateEngine templateEngine) {
         final Properties prop = System.getProperties();
         prop.setProperty("mail.smtp.host", host);
         prop.put("mail.smtp.auth", true);
@@ -43,11 +57,12 @@ public class EmailAccessor {
                     }
                 });
         this.session = session;
+        this.templateEngine = templateEngine;
     }
 
     public void sendEmail(final Email email) {
         try {
-            MimeMessage message = new MimeMessage(this.session);
+            final MimeMessage message = new MimeMessage(this.session);
             // Set From Field: adding senders email to from field.
             message.setFrom(new InternetAddress(email.getSender()));
             // Set To Field: adding recipient's email to from field.
@@ -58,7 +73,31 @@ public class EmailAccessor {
             message.setContent(email.getBody(), "text/html");
             Transport.send(message);
         } catch (final MessagingException mex) {
-            mex.printStackTrace();
+            log.error("Error sending email.", mex);
+        }
+    }
+
+    public void sendWeatherReportEmail(final User user, final MultiDayWeatherForecast forecast) {
+        try {
+            final MimeMessage message = new MimeMessage(this.session);
+            final MimeMessageHelper helper = new MimeMessageHelper(message,
+                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
+            // Set From Field: adding senders email to from field.
+            message.setFrom(new InternetAddress(WPE_SENDER));
+            // Set To Field: adding recipient's email to from field.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+            message.setSubject(forecast.getForecast().size() + WPE_SUBJECT);
+            // Create the content for this email
+            final Context context = new Context();
+            context.setVariable("user", user);
+            context.setVariable("mdf", forecast.getForecast().subList(0, 5));
+            context.setVariable("today", forecast.getToday());
+            final String body = this.templateEngine.process("email/weatherEmail", context);
+            helper.setText(body, true);
+            Transport.send(message);
+        } catch (final MessagingException mex) {
+            log.error("Error sending email.", mex);
         }
     }
 }

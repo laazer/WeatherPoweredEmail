@@ -14,6 +14,8 @@ import lombok.ToString;
 public class MultiDayWeatherForecast {
 
     private final List<WeatherForecast> forecast;
+    private String city;
+    private String country;
 
     public MultiDayWeatherForecast() {
         this.forecast = new ArrayList<>();
@@ -21,6 +23,10 @@ public class MultiDayWeatherForecast {
 
     public void addWeatherForecast(final WeatherForecast weatherForecast) {
         this.forecast.add(weatherForecast);
+    }
+
+    public WeatherForecast getToday() {
+        return this.forecast.stream().findFirst().orElse(null);
     }
 
     public String getWeatherSummary() {

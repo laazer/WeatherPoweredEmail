@@ -8,8 +8,10 @@ import com.laazer.wpe.model.WeatherForecast;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -28,23 +30,32 @@ public class WeatherAccessor {
         this.apiKey = apiKey;
     }
 
-    public MultiDayWeatherForecast getWeather(final String location) {
+    /**
+     * Get the weather for the given zip code. The given time zone is applied to the dates to localize to the correct time zone.
+     * If the given time zone is null, dates will be localized to UTC.
+     * @param location zzp code
+     * @param timeZone time zone to localize to. null value localizes to UTC
+     * @return the weather for the given zip code. The given time zone is applied to the dates to localize to the correct time zone.
+     * If the given time zone is null, dates will be localized to UTC.
+     */
+    public MultiDayWeatherForecast getWeather(final String location, final String timeZone) {
         final RestTemplate restTemplate = new RestTemplate();
         final MultiDayWeatherForecastData forecast = restTemplate.getForObject(this.getPath(location),
                 MultiDayWeatherForecastData.class);
-        return forecast == null ? null : toForecastModel(forecast);
+        return forecast == null ? null : toForecastModel(forecast, timeZone);
     }
     private String getPath(final String zipCode) {
         return MessageFormat.format(PATH, zipCode, DEFAULT_TEMP_UNIT, this.apiKey);
     }
 
-    private static MultiDayWeatherForecast toForecastModel(final MultiDayWeatherForecastData data) {
+    private static MultiDayWeatherForecast toForecastModel(final MultiDayWeatherForecastData data, final String timeZone) {
         final MultiDayWeatherForecast result = new MultiDayWeatherForecast();
         final List<WeatherForecastData> forecastData = Arrays.asList(data.getList());
+        final ZoneId zoneId = timeZone == null ? ZoneId.of("UTC") : ZoneId.of(timeZone);
         forecastData.stream().sorted((a, b) -> (int) (a.getDt() - b.getDt()))
                 .forEach(f -> {
                     final WeatherForecast forecast = WeatherForecast.builder()
-                            .date(new Date(f.getDt()))
+                            .date(LocalDateTime.ofInstant(Instant.ofEpochMilli(f.getDt()), zoneId))
                             .avgTemp(f.getMain().getTemp())
                             .minTemp(f.getMain().getTemp_min())
                             .maxTemp(f.getMain().getTemp_max())
@@ -56,6 +67,7 @@ public class WeatherAccessor {
                             .snow3hVolume(f.getSnow() != null ? f.getSnow().getVolume_3h() : 0)
                             .descSmall(Arrays.asList(f.getWeather()).stream().findFirst().map(WeatherInfo::getMain).orElse(null))
                             .descLarge(Arrays.asList(f.getWeather()).stream().findFirst().map(WeatherInfo::getDescription).orElse(null))
+                            .icon(Arrays.asList(f.getWeather()).stream().findFirst().map(WeatherInfo::getIcon).orElse(null))
                             .build();
                     result.addWeatherForecast(forecast);
                 });
@@ -85,6 +97,7 @@ public class WeatherAccessor {
         private WindData wind;
         private SnowData snow;
         private RainData rain;
+        private CityData city;
     }
     @Data
     @NoArgsConstructor
@@ -103,6 +116,7 @@ public class WeatherAccessor {
     private static class WeatherInfo {
         private String main;
         private String description;
+        private String icon;
     }
 
     @Data
@@ -127,11 +141,20 @@ public class WeatherAccessor {
         @JsonProperty(value = "3h")
         private double volume_3h;
     }
+
     @Data
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class WindData {
         private double speed;
         private double deg;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private static class CityData {
+        private String name;
+        private String country;
     }
 }

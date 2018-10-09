@@ -1,6 +1,10 @@
 package com.laazer.wpe.model;
 
-import java.util.Date;
+import java.text.MessageFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +16,9 @@ import lombok.Data;
 @Builder
 public class WeatherForecast {
 
-    private final Date date;
+    private static final String ICON_SRC_FORMAT = "http://openweathermap.org/img/w/{0}.png";
+
+    private final LocalDateTime date;
     private double avgTemp;
     private double maxTemp;
     private double minTemp;
@@ -25,9 +31,18 @@ public class WeatherForecast {
     private double pressure;
     private String descSmall;
     private String descLarge;
+    private String icon;
 
     public String getWeatherSummary() {
         //TODO
         return null;
+    }
+
+    public String forecastDayName() {
+        return DayOfWeek.from(this.date).getDisplayName(TextStyle.FULL, Locale.US);
+    }
+
+    public String getIconSrc() {
+        return MessageFormat.format(ICON_SRC_FORMAT, this.getIcon());
     }
 }

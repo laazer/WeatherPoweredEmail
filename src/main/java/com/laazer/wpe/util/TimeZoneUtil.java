@@ -1,8 +1,14 @@
 package com.laazer.wpe.util;
 
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.function.Function;
 
@@ -87,9 +93,9 @@ public final class TimeZoneUtil {
         return result;
     }
 
-    public static void main(String[] args) {
-
-        System.out.println(getMinUntilUtc(7, 13));
+    public static String getCurrentDayOfWeekForTimeZone(final String tz) {
+        final ZonedDateTime zdt = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of(tz));
+        return DayOfWeek.from(zdt).getDisplayName(TextStyle.FULL, Locale.US);
     }
 
 }

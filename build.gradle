@@ -50,6 +50,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compile("org.springframework.boot:spring-boot-starter-mail")
     // google maps
     compile 'com.google.maps:google-maps-services:0.2.11'
     testCompile('org.springframework.boot:spring-boot-starter-test')
