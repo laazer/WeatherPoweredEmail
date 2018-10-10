@@ -14,6 +14,7 @@ public class User {
 
     @Id
     private String email;
+    private String name;
     private String location;
     private String zipCode;
     private String timeZone;

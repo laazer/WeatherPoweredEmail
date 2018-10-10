@@ -3,7 +3,7 @@ package com.laazer.wpe.tasks;
 import com.laazer.wpe.dao.EmailAccessor;
 import com.laazer.wpe.dao.WeatherAccessor;
 import com.laazer.wpe.db.UserRepository;
-import com.laazer.wpe.model.MultiDayWeatherForecast;
+import com.laazer.wpe.model.DetailedMultiDayWeatherForecast;
 import com.laazer.wpe.model.User;
 import com.laazer.wpe.util.TimeZoneUtil;
 
@@ -44,7 +44,8 @@ public class EmailTask {
     }
 
     private void sendWeatherReportEmail(final User user) {
-        final MultiDayWeatherForecast weather = weatherAccessor.getWeather(user.getZipCode(), user.getTimeZone());
-        this.emailAccessor.sendWeatherReportEmail(user, weather);
+        final DetailedMultiDayWeatherForecast weather = weatherAccessor.getDetailedWeather(user.getZipCode(), user.getTimeZone());
+        this.emailAccessor.sendWeatherReportEmail(user, weather.getDisplayData().get(0),
+                weather.getDisplayData());
     }
 }

@@ -53,12 +53,14 @@ body {
     text-align: right;
     justify-content: space-between;
     margin-bottom: 4px;
+    direction: rtl;
 }
 .weatherIcon {
     padding: 0;
     position: absolute;
     top: 40px;
     font-size: 60px;
+    margin-right: 40px;
 }
 .weatherTemp {
     font-size: 45px;
@@ -87,7 +89,7 @@ body {
 }
 
 .weatherForecast {
-  height: 140px;
+  height: 1ttpx;
   width: 100%;
   background: #FFF;
   text-align: center;
@@ -140,31 +142,43 @@ body {
   background: radial-gradient(ellipse at center, rgb(199, 212, 230) 0%, rgb(139, 164, 173) 100%);
   color: #395c6b;
 }
+
+.fiveDayForecast {
+    display: contents;
+}
 </style>
     <title>Your Forecast</title>
 </head>
 <body>
 <div class="ww-wrapper">
     <div class="ww-row">
+        <p th:text="${user.getName()}" />
+    </div>
+    <div class="ww-row">
         <div class="cityContainer">
-            <div class="weatherDesc"  th:text="${today.getDescLarge()}"></div>
             <div class="iconTempWrapper">
+                <div class="weatherDesc"  th:text="${today.getDesc()}"></div>
                 <div class="weatherIcon">
-                    <img th:src="${today.getIconSrc()}" />
+                    <img th:src="${today.getIcon()}" />
                 </div>
                 <div class="tempAndCity">
-                    <p class="weatherTemp" th:text="${today.getAvgTemp()} +'°F'">°F</p>
+                    <p class="weatherTemp" th:text="${today.getMaxTemp()} +'°F'">°F</p>
                     <p class="cityName" th:text="${user.getLocation()}"/>
+                </div>
             </div>
         </div>
+    </div>
+    <div class="ww-row">
+        <div class="fiveDayForecast">
         <div class="weatherForecast" th:each="forecast : ${mdf}">
-            <div class="forecastCard"><p th:text="${forecast.forecastDayName()}" />
+            <div class="forecastCard"><p th:text="${forecast.getDayName()}" />
                 <p class="forecastIcons">
-                    <img th:src="${forecast.getIconSrc()}" />
+                    <img th:src="${forecast.getIcon()}" />
                 </p>
                 <p class="forecastMax" th:text="${forecast.getMaxTemp() + '°'}"/>
                 <p class="forecastMin" th:text="${forecast.getMinTemp() + '°'}"/>
             </div>
+        </div>
         </div>
     </div>
 </div>

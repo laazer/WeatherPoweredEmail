@@ -1,14 +1,15 @@
 package com.laazer.wpe.dao;
 
 import com.laazer.wpe.model.Email;
-import com.laazer.wpe.model.MultiDayWeatherForecast;
 import com.laazer.wpe.model.User;
+import com.laazer.wpe.model.WeatherDisplayData;
 
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -77,7 +78,8 @@ public class EmailAccessor {
         }
     }
 
-    public void sendWeatherReportEmail(final User user, final MultiDayWeatherForecast forecast) {
+    public void sendWeatherReportEmail(final User user, final WeatherDisplayData today,
+                                       final List<WeatherDisplayData> weekForecast) {
         try {
             final MimeMessage message = new MimeMessage(this.session);
             final MimeMessageHelper helper = new MimeMessageHelper(message,
@@ -87,12 +89,12 @@ public class EmailAccessor {
             message.setFrom(new InternetAddress(WPE_SENDER));
             // Set To Field: adding recipient's email to from field.
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
-            message.setSubject(forecast.getForecast().size() + WPE_SUBJECT);
+            message.setSubject(weekForecast.size() + WPE_SUBJECT);
             // Create the content for this email
             final Context context = new Context();
             context.setVariable("user", user);
-            context.setVariable("mdf", forecast.getForecast().subList(0, 5));
-            context.setVariable("today", forecast.getToday());
+            context.setVariable("mdf", weekForecast.subList(0, 5));
+            context.setVariable("today", today);
             final String body = this.templateEngine.process("email/weatherEmail", context);
             helper.setText(body, true);
             Transport.send(message);

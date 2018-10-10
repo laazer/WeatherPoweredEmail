@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class TaskConfig {
 
     public static final long EMAIL_TASK_RATE_MS = TimeUnit.HOURS.toMillis(1);
-    public static final String TEST_CRON = "0 */2 * ? * *";
+    public static final String TEST_CRON = "0 */1 * ? * *";
     public static final String EMAIL_TASK_RATE_CRON = "0 0 0/1 ? * *";
 
     @Autowired

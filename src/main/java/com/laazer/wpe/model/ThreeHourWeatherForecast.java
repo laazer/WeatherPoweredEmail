@@ -14,12 +14,12 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class WeatherForecast {
+public class ThreeHourWeatherForecast {
 
     private static final String ICON_SRC_FORMAT = "http://openweathermap.org/img/w/{0}.png";
 
     private final LocalDateTime date;
-    private double avgTemp;
+    private double curTemp;
     private double maxTemp;
     private double minTemp;
     private int humidity;
@@ -32,11 +32,6 @@ public class WeatherForecast {
     private String descSmall;
     private String descLarge;
     private String icon;
-
-    public String getWeatherSummary() {
-        //TODO
-        return null;
-    }
 
     public String forecastDayName() {
         return DayOfWeek.from(this.date).getDisplayName(TextStyle.FULL, Locale.US);
