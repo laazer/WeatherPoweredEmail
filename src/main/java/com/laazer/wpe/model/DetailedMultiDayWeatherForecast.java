@@ -42,14 +42,12 @@ public class DetailedMultiDayWeatherForecast {
 
     public List<WeatherDisplayData> getDisplayData() {
         return this.forecast.values().stream()
-//                .sorted(LocalDate::compareTo)
-//                .map(k -> forecast.get(k))
                 .map(f -> WeatherDisplayData.builder()
                 .dayName(f.stream().findFirst().map(ThreeHourWeatherForecast::forecastDayName).orElse(null))
                 .desc(f.stream().findFirst().map(ThreeHourWeatherForecast::getDescSmall).orElse(null))
                 .icon(f.stream().findFirst().map(ThreeHourWeatherForecast::getIconSrc).orElse(null))
                 .maxTemp(f.stream().mapToDouble(ThreeHourWeatherForecast::getMaxTemp).max().getAsDouble())
-                .minTemp(f.stream().mapToDouble(ThreeHourWeatherForecast::getMaxTemp).min().getAsDouble())
+                .minTemp(f.stream().mapToDouble(ThreeHourWeatherForecast::getMinTemp).min().getAsDouble())
                 .build()).collect(Collectors.toList());
     }
 }
