@@ -29,6 +29,7 @@ public class WeatherController {
     @GetMapping("weather/{id}")
     public String getWeather(@PathVariable final String id, Model model) {
         log.info("Getting user id for {}", id);
+        //TODO fix at some point?
         final User user = this.userRepository.findById(id + ".com").get();
         final DetailedMultiDayWeatherForecast forecast = this.weatherAccessor
                 .getDetailedWeather(user.getZipCode(), user.getTimeZone());

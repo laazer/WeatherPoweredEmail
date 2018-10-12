@@ -34,7 +34,7 @@ public class ThreeHourWeatherForecast {
     private String icon;
 
     public String forecastDayName() {
-        return DayOfWeek.from(this.date).getDisplayName(TextStyle.FULL, Locale.US);
+        return DayOfWeek.from(this.date).getDisplayName(TextStyle.SHORT, Locale.US);
     }
 
     public String getIconSrc() {
